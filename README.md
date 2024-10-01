@@ -1,6 +1,11 @@
 # plume-pg-app-century
 Migrating Plume app from PG to YB with Voyager
 
+## Tech & versions used
+- Postgres docker image ```postgres:10.5```
+- YugabyteDB docker image ```yugabytedb/yugabyte:2.23.0.0-b710```
+- Yugabyte Voygaer docker image ```yugabytedb/yb-voyager:1.8.2-rc2```
+
 ## 1. Run Plume on YB
 
 Follow steps mentioned in [yb/steps.md](yb/steps.md)
