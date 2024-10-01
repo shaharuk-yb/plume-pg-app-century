@@ -1,0 +1,34 @@
+version: '3'
+
+services:  
+  yugabyte:
+    image: yugabytedb/yugabyte:2.23.0.0-b710
+    # platform: linum/amd64
+    restart: unless-stopped
+    volumes:
+      - "./data/yb_data:/home/yugabyte/yb_data"
+    env_file: .env
+    ports:
+      - "7000:7000"
+      - "9000:9000"
+      - "15433:15433"
+      - "5433:5433"
+      - "9042:9042"
+    command: ["bin/yugabyted", "start", "--base_dir=/home/yugabyte/yb_data", "--background=false"]
+
+  plume:
+    image: plumeorg/plume:latest
+    platform: linux/amd64 
+    env_file: .env
+    restart: unless-stopped
+    volumes:
+      - "./data/plume/static/media:/app/static/media"
+      - "./.env:/app/.env"
+      - "./search_index:/app/search_index"
+      - "./wait/wait-for-it.sh:/wait/wait-for-it.sh"
+    ports:
+      - "7878:7878"
+    depends_on:
+      - yugabyte
+    # entrypoint: ["/wait/wait-for-it.sh", "postgres:5432", "--", "plume"]
+

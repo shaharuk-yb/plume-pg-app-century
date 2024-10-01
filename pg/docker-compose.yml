@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:10.5
+    platform: linux/amd64 
+    env_file: .env
+    restart: unless-stopped
+    volumes:
+      - "./data/postgres:/var/lib/postgresql/data"
+  plume:
+    image: plumeorg/plume:latest
+    platform: linux/amd64 
+    env_file: .env
+    restart: unless-stopped
+    volumes:
+      - "./data/plume/static/media:/app/static/media"
+      - "./.env:/app/.env"
+      - "./search_index:/app/search_index"
+      - "./wait/wait-for-it.sh:/wait/wait-for-it.sh"
+    ports:
+      - "7878:7878"
+    depends_on:
+      - postgres
+    # entrypoint: ["/wait/wait-for-it.sh", "postgres:5432", "--", "plume"]
+
